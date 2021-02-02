@@ -15,10 +15,11 @@ resource "docker_image" "imagen-ubuntu" {
 resource "docker_container" "contenedor-ubuntu" {
     name = "mi_contenedor_ubuntu"
     image = docker_image.imagen-ubuntu.latest
-    
+    #command = ["bash", "-c" ,"sleep 600"]
     dynamic "volumes" {
         for_each = var.volumenes
         content {
+            #volume_name = contains(list(volumes),"volume_name") ? volumes.value["volume_name"] : null
             host_path = volumes.value["host_path"]
             container_path = volumes.value["container_path"]
         }

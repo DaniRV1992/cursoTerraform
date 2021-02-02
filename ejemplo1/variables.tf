@@ -19,6 +19,7 @@ variable "volumenes" {
             container_path = "/cursoTerraform"
         },
         {
+            volume_name = "vol_ivan2"
             host_path = "/home/ubuntu/environment/ivan"
             container_path = "/ivan"
         }
