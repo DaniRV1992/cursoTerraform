@@ -21,16 +21,26 @@ resource "docker_container" "contenedor-nginx" {
     }
 }
 
-resource "docker_container" "contenedores-map-nginx" {
-    for_each = var.contenedores_custom
-    name  = each.key
+# resource "docker_container" "contenedores-map-nginx" {
+#     for_each = var.contenedores_custom
+#     name  = each.key
+#     image = docker_image.imagen-nginx.latest
+#     ports {
+#         internal = 80
+#         external = each.value["puerto"]
+#     }
+#     volumes {
+#         host_path      = each.value["host_path"]
+#         container_path = each.value["container_path"]
+#     }
+# }
+
+resource "docker_container" "contenedores-list-nginx" {
+    count = length(var.contenedores)
+    name  = var.contenedores[count.index]["nombre"]
     image = docker_image.imagen-nginx.latest
     ports {
         internal = 80
-        external = each.value["puerto"]
-    }
-    volumes {
-        host_path      = each.value["host_path"]
-        container_path = each.value["container_path"]
+        external = var.contenedores[count.index]["puerto"]
     }
 }

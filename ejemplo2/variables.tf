@@ -10,24 +10,20 @@ variable "version_imagen" {
     default = "latest"
 }
 
-# variable "contenedores" {
-#     description = "contenedores"
-#     type = list(object(string))
-#     default = [
-#         {
-#             nombre = "contenedorA"
-#             puerto = "8090"
-#             volumen = {
-#                 host_path = "/home/ubuntu/environment/cursoTerraform"
-#                 container_path = "/cursoTerraform"
-#             }
-#         },
-#         {
-#             nombre = "contenedorB"
-#             puerto = "8091"
-#         }
-#     ]
-# }
+variable "contenedores" {
+    description = "contenedores"
+    type = list(map(string))
+    default = [
+        {
+            nombre = "contenedorA"
+            puerto = "8090"
+        },
+        {
+            nombre = "contenedorB"
+            puerto = "8091"
+        }
+    ]
+}
 
 variable "contenedores_custom" {
     description = "Contendores nginx"
