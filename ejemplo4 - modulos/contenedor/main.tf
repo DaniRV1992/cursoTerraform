@@ -1,0 +1,26 @@
+terraform {
+    required_providers {
+        docker = {
+            source = "kreuzwerker/docker"
+        }
+    }
+}
+
+provider "docker" {}
+
+resource "docker_image" "imagen" {
+    name = format("%s:%s", var.nombre_imagen, var.version_imagen)
+} 
+
+resource "docker_container" "contenedor" {
+    name = var.nombre_contenedor
+    image = docker_image.imagen.latest
+    dynamic "ports" {
+        for_each = var.puertos
+        content {
+            internal = ports.value["internal"]
+            external = ports.value["external"]
+            protocol = ports.value["protocol"]
+        }
+    }
+}
