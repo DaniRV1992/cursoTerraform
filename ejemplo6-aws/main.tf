@@ -27,7 +27,8 @@ resource "aws_instance" "my-machine" {
     provisioner "remote-exec" {
         inline = [
             "sudo apt update",
-            "sudo apt install docker -y"
+            # "sudo apt install docker -y",
+            "docker run -p 8080:80 -d nginx"
         ]
     }
     
@@ -41,10 +42,17 @@ resource "aws_instance" "my-machine" {
 }
 
 resource "aws_security_group" "network_rules" {
-    name = "Allow_access"
+    name = "daniel_allow_access"
     ingress {
         from_port = 22
         to_port = 22
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    
+    ingress {
+        from_port = 8080
+        to_port = 8080
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
@@ -64,8 +72,12 @@ resource "tls_private_key" "my_private_key" {
 }
 
 resource "aws_key_pair" "my_keys" {
-    key_name = "my_keys"
+    key_name = "daniel_my_keys"
     public_key = tls_private_key.my_private_key.public_key_openssh
+}
+
+output "public_ip" {
+    value = aws_instance.my-machine.public_ip
 }
 
 output "private_key" {
